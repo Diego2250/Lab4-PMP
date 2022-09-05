@@ -1,0 +1,5 @@
+Descargue el programa lab4_1.cpp, identifique los errores de diseño del programa.
+a.	 No se aprovecha el paralelismo debido a que se espera a que cada hilo termine. 
+b.	La variable global resp está mal usada debido a que no esta protegida. 
+c.	El return de la subrutina no está siendo utilizado debido a que se utiliza una variable global para el resultado, por lo que el return vuelve a retornar ese mismo resultado. 
+d.	Lo hilos utilizados no tienen un ID.
