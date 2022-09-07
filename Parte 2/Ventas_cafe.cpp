@@ -41,6 +41,7 @@ struct mes{
     double totalUtilidad;
     double CostosVariables;
 };
+
 mes meses[nMeses];
 
 void VentasMensuales(){
@@ -87,7 +88,7 @@ void DataMes(mes* mes){
     mes->totalUtilidad = totalUtilidad;
 }
 
-void DataProducto(void *args){
+void* DataProducto(void *args){
     auto *producto = (struct producto*) args;
     double precio = producto->producto.precio;
     double costo = producto->producto.costo;
@@ -123,6 +124,22 @@ void reporte(mes* mes){
     printf("Costos variables del mes: Q. %d", mes->CostosVariables);
     //print utilidad del mes
     printf("Utilidad del mes: Q. %d", mes->totalUtilidad - mes->CostosVariables);
+}
+
+void CrearVentas(), reporte(mes* mes), DataMes(mes* mes);
+void* DataProducto(void *args);
+int main(){
+    CrearVentas(); 
+    pthread_t threads[productos * nMeses];
+    int i = 0;
+    for(auto &mes : meses){
+        for(auto &producto : mes.productos){
+            pthread_create(&threads[i], NULL, DataProducto, (void *)&producto);
+            i++;
+        }
+        DataMes(&mes);
+        reporte(&mes);
+    }
 }
 
 
