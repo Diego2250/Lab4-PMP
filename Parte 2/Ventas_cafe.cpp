@@ -46,12 +46,12 @@ mes meses[nMeses];
 
 void VentasMensuales(){
     constProducto PastelChocolate = {"Pastel de chocolate", 60.0, 20.0};
-    constProducto WhiteMocca = {"White Mocca", 32.0, 19.0};
+    constProducto WhiteMocca = {"White Mocca", 32.0, 19.20};
     constProducto Americano = {"Cafe Americano", 22.0, 13.2};
     constProducto Latte = {"Latte", 24.0, 17.2};
     constProducto ToffeCoffee = {"Toffe Coffee", 28.0, 20.1};
     constProducto Cappuccino = {"Cappuccino", 24.0, 17.2};
-    constProducto SmoresLatte = {"Smores Latte", 32.0, 13.0};
+    constProducto SmoresLatte = {"Smores Latte", 32.0, 23.0};
     constProducto CafeMolido = {"Cafe Tostado Molido", 60.0, 20.0};
 
     meses[0].nombre = "Julio";
@@ -85,7 +85,7 @@ void DataMes(mes* mes){
         totalUtilidad += producto.utilidad;
     }
     mes->totalVentas = totalVentas;
-    mes->totalUtilidad = totalUtilidad;
+    mes->totalUtilidad = totalUtilidad - mes->CostosVariables;
 }
 
 void* DataProducto(void *args){
@@ -111,7 +111,7 @@ void reporte(mes* mes){
     //print linea de separacion
     printf("\n--------------------------------------------\n");
     //print utilidad del producto 
-    cout << "\nUtilidad del mes: Q." << mes->totalUtilidad << endl;
+    printf("\nUtilidad por por producto: \n");
     for(auto producto : mes->productos){
         //print nombre del produto, Q. y utilidad del producto
         cout << producto.producto.nombre << " Q." << producto.utilidad << endl;
