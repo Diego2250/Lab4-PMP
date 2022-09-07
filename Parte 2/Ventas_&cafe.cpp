@@ -76,4 +76,53 @@ void VentasMensuales(){
     meses[1].CostosVariables = 40590.0;
 }
 
+void DataMes(mes* mes){
+    double totalVentas = 0;
+    double totalUtilidad = 0;
+    for(auto producto : mes->productos){
+        totalVentas += producto.ventas; 
+        totalUtilidad += producto.utilidad;
+    }
+    mes->totalVentas = totalVentas;
+    mes->totalUtilidad = totalUtilidad;
+}
+
+void DataProducto(void *args){
+    auto *producto = (struct producto*) args;
+    double precio = producto->producto.precio;
+    double costo = producto->producto.costo;
+    int cantidad = producto->cantidad;
+    producto->ventas = precio * cantidad;
+    producto->utilidad = producto->ventas - (producto->cantidad * producto->producto.costo);
+    pthread_exit(NULL);
+}
+
+void reporte(mes* mes){
+    //print linea de separacion
+    printf("--------------------------------------------\n");
+    printf("Reporte de ventas del mes de %s", mes->nombre.c_str());
+    printf("--------------------------------------------\n");
+    printf("Ventas por producto: \n");
+    for(auto producto : mes->productos){
+        //print nombre del produto, Q. y ventas del producto
+        printf("%s: Q. %d", producto.producto.nombre.c_str(), producto.ventas);
+    }
+    //print linea de separacion
+    printf("--------------------------------------------\n");
+    //print utilidad del producto 
+    printf("utilidad del mes: Q. %d", mes->totalUtilidad);
+    for(auto producto : mes->productos){
+        //print nombre del produto, Q. y utilidad del producto
+        printf("%s: Q. %d", producto.producto.nombre.c_str(), producto.utilidad);
+    }
+    //print linea de separacion
+    printf("--------------------------------------------\n");
+    //print total de ventas del mes
+    printf("Total de ventas del mes: Q. %d", mes->totalVentas);
+    //print costos variables del mes
+    printf("Costos variables del mes: Q. %d", mes->CostosVariables);
+    //print utilidad del mes
+    printf("Utilidad del mes: Q. %d", mes->totalUtilidad - mes->CostosVariables);
+}
+
 
