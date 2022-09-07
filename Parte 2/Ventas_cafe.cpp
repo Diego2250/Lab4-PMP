@@ -23,15 +23,15 @@ const int nMeses = 2;
 
 struct constProducto{
     string nombre;
-    int precio;
-    int costo;
+    double precio;
+    double costo;
 };
 
 struct producto{
     constProducto producto;
     int cantidad;
-    int ventas;
-    int utilidad;
+    double ventas;
+    double utilidad;
 };
 
 struct mes{
@@ -100,43 +100,40 @@ void* DataProducto(void *args){
 
 void reporte(mes* mes){
     //print linea de separacion
-    printf("--------------------------------------------\n");
-    printf("Reporte de ventas del mes de %s", mes->nombre.c_str());
-    printf("--------------------------------------------\n");
-    printf("Ventas por producto: \n");
+    printf("\n--------------------------------------------\n");
+    printf("\nReporte de ventas del mes de %s \n", mes->nombre.c_str());
+    printf("\n--------------------------------------------\n");
+    printf("\nVentas por producto: \n");
     for(auto producto : mes->productos){
         //print nombre del produto, Q. y ventas del producto
-        printf("%s: Q. %d", producto.producto.nombre.c_str(), producto.ventas);
+        cout << producto.producto.nombre << " Q." << producto.ventas << endl;
     }
     //print linea de separacion
-    printf("--------------------------------------------\n");
+    printf("\n--------------------------------------------\n");
     //print utilidad del producto 
-    printf("utilidad del mes: Q. %d", mes->totalUtilidad);
+    cout << "\nUtilidad del mes: Q." << mes->totalUtilidad << endl;
     for(auto producto : mes->productos){
         //print nombre del produto, Q. y utilidad del producto
-        printf("%s: Q. %d", producto.producto.nombre.c_str(), producto.utilidad);
+        cout << producto.producto.nombre << " Q." << producto.utilidad << endl;
     }
     //print linea de separacion
-    printf("--------------------------------------------\n");
+    printf("\n--------------------------------------------\n");
     //print total de ventas del mes
-    printf("Total de ventas del mes: Q. %d", mes->totalVentas);
-    //print costos variables del mes
-    printf("Costos variables del mes: Q. %d", mes->CostosVariables);
-    //print utilidad del mes
-    printf("Utilidad del mes: Q. %d", mes->totalUtilidad - mes->CostosVariables);
+    cout << "Total de ventas del mes: Q. " << mes->totalVentas << endl;
+    cout << "Costos variables del mes: Q. " << mes->CostosVariables << endl;
+    cout << "Utilidad neta del mes: Q. " << mes->totalUtilidad << endl;
 }
 
-void CrearVentas(), reporte(mes* mes), DataMes(mes* mes);
-void* DataProducto(void *args);
 int main(){
-    CrearVentas(); 
+    VentasMensuales(); 
     pthread_t threads[productos * nMeses];
     int i = 0;
     for(auto &mes : meses){
         for(auto &producto : mes.productos){
-            pthread_create(&threads[i], NULL, DataProducto, (void *)&producto);
+            pthread_create(&threads[i], NULL, &DataProducto, (void *)&producto);
             i++;
         }
+        pthread_join(threads[i-1], NULL);
         DataMes(&mes);
         reporte(&mes);
     }
